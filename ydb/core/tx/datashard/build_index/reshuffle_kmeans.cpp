@@ -95,7 +95,7 @@ public:
         const auto& data = request.GetDataColumns();
         // scan tags
         NTable::TTag embeddingTag;
-        ScanTags = MakeUploadTags(table, embedding, data, EmbeddingPos, DataPos, embeddingTag);
+        ScanTags = MakeScanTags(table, embedding, data, EmbeddingPos, DataPos, embeddingTag);
         Lead.SetTags(ScanTags);
         // upload types
         PostingBuf = Uploader.AddDestination(request.GetPostingName(), MakeUploadTypes(table, UploadState, embedding, data));

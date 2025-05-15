@@ -151,9 +151,9 @@ void AddRowBuildToBuild(TBufferData& buffer, TClusterId parent, TArrayRef<const 
 void AddRowBuildToPosting(TBufferData& buffer, TClusterId parent, TArrayRef<const TCell> key, TArrayRef<const TCell> row,
                          ui32 dataPos, ui32 prefixColumns = 1);
 
-TTags MakeUploadTags(const TUserTable& table, const TProtoStringType& embedding,
-                     const google::protobuf::RepeatedPtrField<TProtoStringType>& data, ui32& embeddingPos,
-                     ui32& dataPos, NTable::TTag& embeddingTag);
+TTags MakeScanTags(const TUserTable& table, const TProtoStringType& embedding,
+                   const google::protobuf::RepeatedPtrField<TProtoStringType>& data, ui32& embeddingPos,
+                   ui32& dataPos, NTable::TTag& embeddingTag);
 
 std::shared_ptr<NTxProxy::TUploadTypes>
 MakeUploadTypes(const TUserTable& table, NKikimrTxDataShard::EKMeansState uploadState,

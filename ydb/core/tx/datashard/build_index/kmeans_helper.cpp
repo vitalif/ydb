@@ -95,9 +95,9 @@ void AddRowBuildToPosting(TBufferData& buffer, TClusterId parent, TArrayRef<cons
         TSerializedCellVec{key});
 }
 
-TTags MakeUploadTags(const TUserTable& table, const TProtoStringType& embedding,
-                     const google::protobuf::RepeatedPtrField<TProtoStringType>& data, ui32& embeddingPos,
-                     ui32& dataPos, NTable::TTag& embeddingTag)
+TTags MakeScanTags(const TUserTable& table, const TProtoStringType& embedding,
+                   const google::protobuf::RepeatedPtrField<TProtoStringType>& data, ui32& embeddingPos,
+                   ui32& dataPos, NTable::TTag& embeddingTag)
 {
     auto tags = GetAllTags(table);
     TTags uploadTags;
