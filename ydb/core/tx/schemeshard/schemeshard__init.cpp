@@ -4623,6 +4623,7 @@ struct TSchemeShard::TTxInit : public TTransactionBase<TSchemeShard> {
                     return false;
                 }
 
+                size_t n = 0;
                 while (!rowset.EndOfSet()) {
                     TIndexBuildId id = rowset.GetValue<Schema::KMeansTreeSample::Id>();
                     const auto* buildInfoPtr = Self->IndexBuilds.FindPtr(id);
@@ -4632,11 +4633,16 @@ struct TSchemeShard::TTxInit : public TTransactionBase<TSchemeShard> {
                         rowset.GetValue<Schema::KMeansTreeSample::Probability>(),
                         rowset.GetValue<Schema::KMeansTreeSample::Data>()
                     );
+                    n++;
 
                     if (!rowset.Next()) {
                         return false;
                     }
                 }
+
+                LOG_NOTICE_S(ctx, NKikimrServices::FLAT_TX_SCHEMESHARD,
+                             "KMeansTreeSample records: " << n
+                             << ", at schemeshard: " << Self->TabletID());
             }
 
             // read index build columns
