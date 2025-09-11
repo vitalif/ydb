@@ -10,6 +10,9 @@ SRCS(
 )
 
 PEERDIR(
+    library/cpp/l1_distance
+    library/cpp/l2_distance
+    library/cpp/dot_product
     ydb/library/workload/abstract
 )
 

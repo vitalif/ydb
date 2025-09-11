@@ -55,7 +55,11 @@ void TVectorWorkloadParams::ConfigureOpts(NLastGetopt::TOpts& opts, const EComma
         opts.AddLongOption( "non-indexed", "Take vector settings from the index, but search without the index.")
             .StoreTrue(&NonIndexedSearch);
         opts.AddLongOption("stale-ro", "Read with StaleRO mode")
-            .StoreTrue(&StaleRO);            
+            .StoreTrue(&StaleRO);
+        opts.AddLongOption( "levels-cache", "Cache levels table in memory for faster search.")
+            .StoreTrue(&LevelsCache);
+        opts.AddLongOption("overlapping-clusters", "Enable overlapping clusters heuristic (adds vectors to ~1.5 clusters on average)")
+            .StoreTrue(&OverlappingClusters);
     };
 
     switch (commandType) {

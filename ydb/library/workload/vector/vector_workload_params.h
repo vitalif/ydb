@@ -13,6 +13,12 @@
 
 namespace NYdbWorkload {
 
+struct TCentroidData {
+    uint64_t Id;
+    uint64_t ParentId;  // Parent centroid ID (__ydb_parent column)
+    std::vector<float> Centroid;
+};
+
 class TVectorWorkloadParams final: public TWorkloadBaseParams {
     friend class TVectorWorkloadGenerator;
 public:
@@ -47,6 +53,8 @@ public:
     bool NonIndexedSearch = false;
     bool StaleRO = false;
     bool KeyIsInt = false;
+    bool LevelsCache = false;
+    bool OverlappingClusters = false;
 };
 
 

@@ -2,6 +2,7 @@
 #include "vector_sql.h"
 #include "vector_workload_generator.h"
 #include "vector_workload_params.h"
+#include "vector_recall_evaluator.h"
 
 #include <util/datetime/base.h>
 #include <util/generic/serialized_enum.h>
@@ -25,6 +26,24 @@ void TVectorWorkloadGenerator::Init() {
         VectorSampler->SampleExistingVectors();
     } else {
         VectorSampler->SelectPredefinedVectors();
+    }
+
+    // Load level centroids if levels cache is enabled
+    if (Params.LevelsCache) {
+        Cout << "Levels cache loading centroids..." << Endl;
+
+        LevelCentroids = LoadAllLevelCentroids(Params);
+
+        if (LevelCentroids.empty()) {
+            Cout << "No centroids loaded for levels cache." << Endl;
+        } else {
+            Cout << LevelCentroids.size() << " level centroids loaded for cache." << Endl;
+        }
+    }
+
+    // Apply overlapping clusters heuristic if enabled
+    if (Params.OverlappingClusters) {
+        ApplyOverlappingClustersHeuristic(Params, 30, 0.6f); // Check up to 30 nearest clusters with 0.6 threshold factor (even less restrictive)
     }
 
     if (Params.Recall) {
@@ -79,6 +98,11 @@ TQueryInfoList TVectorWorkloadGenerator::Upsert() {
 }
 
 TQueryInfoList TVectorWorkloadGenerator::Select() {
+    // Use levels cache if enabled
+    if (Params.LevelsCache) {
+        return SelectLevelsCache();
+    }
+
     CurrentIndex = (CurrentIndex + 1) % VectorSampler->GetTargetCount();
 
     // Create the query string
@@ -96,6 +120,41 @@ TQueryInfoList TVectorWorkloadGenerator::Select() {
     NYdb::TParams params = MakeSelectParams(targetEmbedding, prefixValue, Params.Limit);
 
     // Create the query info with a callback that captures the target index
+    TQueryInfo queryInfo(query, std::move(params));
+    queryInfo.UseStaleRO = Params.StaleRO;
+
+    return TQueryInfoList(1, queryInfo);
+}
+
+TQueryInfoList TVectorWorkloadGenerator::SelectLevelsCache() {
+    Y_ABORT_UNLESS(!LevelCentroids.empty(), "Level centroids must be available for levels cache select");
+
+    CurrentIndex = (CurrentIndex + 1) % VectorSampler->GetTargetCount();
+
+    // Get the embedding for the specified target
+    const auto& targetEmbedding = VectorSampler->GetTargetEmbedding(CurrentIndex);
+
+    // Use utility function to find clusters with levels cache
+    std::vector<ui64> clusterIds = FindClustersWithLevelsCache(LevelCentroids, targetEmbedding, Params, Params.KmeansTreeSearchClusters);
+
+    if (clusterIds.empty()) {
+        Cerr << "Warning: No clusters found by levels cache for target " << CurrentIndex << Endl;
+        // Return empty query list if no clusters found
+        return TQueryInfoList();
+    }
+
+    // Create query for brute force search on posting table
+    std::string query = MakeSelectHnsw(Params);
+
+    // Get the prefix value if needed
+    std::optional<NYdb::TValue> prefixValue;
+    if (Params.PrefixColumn.has_value()) {
+        prefixValue = VectorSampler->GetPrefixValue(CurrentIndex);
+    }
+
+    NYdb::TParams params = MakeSelectHnswParams(targetEmbedding, clusterIds, prefixValue, Params.Limit);
+
+    // Create the query info
     TQueryInfo queryInfo(query, std::move(params));
     queryInfo.UseStaleRO = Params.StaleRO;
 
