@@ -901,13 +901,13 @@ TExprBase WriteTableWithIndexUpdate(const TKiWriteTable& write, const TCoAtomLis
     Y_UNREACHABLE();
 }
 
-bool CheckWriteToIndex(const TExprBase& write, const NYql::TKikimrTableDescription& tableData, TExprContext& ctx) {
-    if (tableData.Metadata->IsIndexImplTable) {
+bool CheckWriteToIndex(const TExprBase& /*write*/, const NYql::TKikimrTableDescription& /*tableData*/, TExprContext& /*ctx*/) {
+    /*if (tableData.Metadata->IsIndexImplTable) {
         const TString err = TStringBuilder() << "Writing to index implementation tables is not allowed. Table: `"
             << tableData.Metadata->Name << "`.";
         ctx.AddError(YqlIssue(ctx.GetPosition(write.Pos()), TIssuesIds::KIKIMR_BAD_REQUEST, err));
         return false;
-    }
+    }*/
     return true;
 }
 
