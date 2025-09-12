@@ -282,7 +282,7 @@ std::vector<ui64> FindClustersWithLevelsCache(const std::vector<TCentroidData>& 
 
 // Utility function to apply overlapping clusters heuristic to posting table
 // This modifies the indexImplPostingTable by adding vectors to additional clusters
-void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size_t maxClustersToCheck, float thresholdFactor) {
+void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params) {
     Cout << "Applying overlapping clusters heuristic..." << Endl;
     Cout << "Index name: " << params.IndexName << Endl;
 
@@ -323,7 +323,7 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
             selectQuery = TStringBuilder()
                 << "--!syntax_v1\n"
                 << "DECLARE $last_parent AS Uint64;\n"
-                << "SELECT __ydb_parent, id, embedding FROM `" << params.TableName << "/" << params.IndexName << "/indexImplPostingTable`"
+                << "SELECT __ydb_parent, id, " << params.EmbeddingColumn << " AS embedding FROM `" << params.TableName << "/" << params.IndexName << "/indexImplPostingTable`"
                 << " WHERE __ydb_parent > $last_parent"
                 << " ORDER BY __ydb_parent, id"
                 << " LIMIT " << batchSize;
@@ -333,7 +333,7 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
                 << "--!syntax_v1\n"
                 << "DECLARE $last_parent AS Uint64;\n"
                 << "DECLARE $last_id AS Uint64;\n"
-                << "SELECT __ydb_parent, id, embedding FROM `" << params.TableName << "/" << params.IndexName << "/indexImplPostingTable`"
+                << "SELECT __ydb_parent, id, " << params.EmbeddingColumn << " AS embedding FROM `" << params.TableName << "/" << params.IndexName << "/indexImplPostingTable`"
                 << " WHERE (__ydb_parent = $last_parent AND id > $last_id) OR __ydb_parent > $last_parent"
                 << " ORDER BY __ydb_parent, id"
                 << " LIMIT " << batchSize;
@@ -466,14 +466,22 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
                 // Apply overlapping clusters heuristic
                 std::vector<ui64> selectedClusters;
                 std::vector<ui64> selectedClusterIds; // Keep track of selected cluster IDs for distance calculations
+                std::vector<float> selectedDistances;
 
                 // Add the original cluster first
                 selectedClusters.push_back(originalClusterId);
                 selectedClusterIds.push_back(originalClusterId);
+                for (auto& [d, c]: clusterDistances) {
+                    if (c == originalClusterId) {
+                        selectedDistances.push_back(d);
+                        break;
+                    }
+                }
+                Y_ABORT_UNLESS(selectedDistances.size() == 1);
 
-                size_t searchLimit = std::min(maxClustersToCheck, clusterDistances.size());
+                size_t searchLimit = std::min(params.OverlappingClusters, clusterDistances.size());
 
-                for (size_t j = 0; j < searchLimit && selectedClusters.size() < maxClustersToCheck; ++j) {
+                for (size_t j = 0; j < searchLimit && selectedClusters.size() < params.OverlappingClusters; ++j) {
                     const auto& [distance, clusterId] = clusterDistances[j];
 
                     // Skip if this is the original cluster (already added)
@@ -490,17 +498,20 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
 
                     // Check the heuristic: skip cluster i if there's a cluster j<i such that
                     // cluster j is closer to cluster i than the vector is to cluster i
-                    for (ui64 selectedClusterId : selectedClusterIds) {
+                    //for (ui64 selectedClusterId : selectedClusterIds) {
+                    for (size_t k = 0; k < selectedClusterIds.size(); k++) {
+                        auto selectedClusterId = selectedClusterIds[k];
+                        auto selectedDistance = selectedDistances[k];
                         auto selectedCentroidIt = centroidMap.find(selectedClusterId);
                         if (selectedCentroidIt == centroidMap.end()) {
                             continue;
                         }
 
-                        // Calculate distance between selected cluster and current cluster
+                        /*// Calculate distance between selected cluster and current cluster
                         float clusterToClusterDist = CalculateDistanceFast(
                             selectedCentroidIt->second.Centroid,
                             currentCentroidIt->second.Centroid,
-                            params.Metric);
+                            params.Metric);*/
 
                         // Calculate distance between vector and current cluster (we already have this)
                         float vectorToClusterDist = distance;
@@ -509,6 +520,8 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
                         // For similarity metrics (higher is better), skip if cluster j is more similar to cluster i than vector
                         // Modified to use threshold factor to make it less strict
                         bool skipCondition = false;
+                        assert(isAscending);
+                        /*
                         if (isAscending) {
                             // Distance metric: skip if cluster-to-cluster distance < vector-to-cluster distance * thresholdFactor
                             skipCondition = (clusterToClusterDist < vectorToClusterDist * thresholdFactor);
@@ -516,6 +529,8 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
                             // Similarity metric: skip if cluster-to-cluster similarity > vector-to-cluster similarity * thresholdFactor
                             skipCondition = (clusterToClusterDist > vectorToClusterDist * thresholdFactor);
                         }
+                        */
+                        skipCondition = (selectedDistance < vectorToClusterDist * params.OverlapThreshold);
 
                         if (skipCondition) {
                             shouldSkip = true;
@@ -526,6 +541,7 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
                     if (!shouldSkip) {
                         selectedClusters.push_back(clusterId);
                         selectedClusterIds.push_back(clusterId);
+                        selectedDistances.push_back(distance);
                         // Add new entry for this cluster (excluding the original cluster)
                         localNewEntries.emplace_back(clusterId, vectorId, embedding);
                         localNewEntriesCount++;
@@ -581,8 +597,8 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
         TStringBuilder insertQuery;
         insertQuery << "--!syntax_v1\n";
         insertQuery << "DECLARE $entries AS List<Struct<__ydb_parent: Uint64, id: Uint64, embedding: String>>;\n";
-        insertQuery << "UPSERT INTO `" << params.TableName << "/" << params.IndexName << "/indexImplPostingTable` (__ydb_parent, id, embedding)\n";
-        insertQuery << "SELECT __ydb_parent, id, embedding FROM AS_TABLE($entries);";
+        insertQuery << "UPSERT INTO `" << params.TableName << "/" << params.IndexName << "/indexImplPostingTable` (__ydb_parent, id, " << params.EmbeddingColumn << ")\n";
+        insertQuery << "SELECT __ydb_parent, id, embedding AS " << params.EmbeddingColumn << " FROM AS_TABLE($entries);";
 
         // Build parameters
         NYdb::TParamsBuilder paramsBuilder;
@@ -601,10 +617,8 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size
         NYdb::TParams queryParams = paramsBuilder.Build();
 
         NYdb::NStatusHelpers::ThrowOnError(params.QueryClient->RetryQuerySync([&](NYdb::NQuery::TSession session) {
-            auto result = session.ExecuteQuery(insertQuery, NYdb::NQuery::TTxControl::BeginTx().CommitTx(), queryParams)
+            return session.ExecuteQuery(insertQuery, NYdb::NQuery::TTxControl::BeginTx().CommitTx(), queryParams)
                 .GetValueSync();
-            Y_ABORT_UNLESS(result.IsSuccess(), "Failed to insert new entries: %s", result.GetIssues().ToString().c_str());
-            return result;
         }));
 
         entriesInserted += (endIdx - i);

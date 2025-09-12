@@ -43,7 +43,7 @@ void TVectorWorkloadGenerator::Init() {
 
     // Apply overlapping clusters heuristic if enabled
     if (Params.OverlappingClusters) {
-        ApplyOverlappingClustersHeuristic(Params, 30, 0.6f); // Check up to 30 nearest clusters with 0.6 threshold factor (even less restrictive)
+        ApplyOverlappingClustersHeuristic(Params); // Check up to 30 nearest clusters with 0.6 threshold factor (even less restrictive)
     }
 
     if (Params.Recall) {

@@ -38,7 +38,7 @@ std::vector<ui64> FindClustersWithLevelsCache(const std::vector<TCentroidData>& 
 
 // Utility function to apply overlapping clusters heuristic to posting table
 // This modifies the indexImplPostingTable by adding vectors to additional clusters
-void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params, size_t maxClustersToCheck = 30, float thresholdFactor = 0.6f);
+void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params);
 
 // Load centroids from level table
 TVector<TCentroidData> LoadCentroidsFromLevelTable(const TVectorWorkloadParams& params);

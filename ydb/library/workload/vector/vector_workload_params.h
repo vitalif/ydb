@@ -54,7 +54,8 @@ public:
     bool StaleRO = false;
     bool KeyIsInt = false;
     bool LevelsCache = false;
-    bool OverlappingClusters = false;
+    size_t OverlappingClusters = 0;
+    float OverlapThreshold = 0.85;
 };
 
 

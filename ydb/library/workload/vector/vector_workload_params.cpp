@@ -58,8 +58,10 @@ void TVectorWorkloadParams::ConfigureOpts(NLastGetopt::TOpts& opts, const EComma
             .StoreTrue(&StaleRO);
         opts.AddLongOption( "levels-cache", "Cache levels table in memory for faster search.")
             .StoreTrue(&LevelsCache);
-        opts.AddLongOption("overlapping-clusters", "Enable overlapping clusters heuristic (adds vectors to ~1.5 clusters on average)")
-            .StoreTrue(&OverlappingClusters);
+        opts.AddLongOption("overlapping-clusters", "Apply overlapping clusters heuristic, try to add vector into this number of clusters")
+            .DefaultValue(0).StoreResult(&OverlappingClusters);
+        opts.AddLongOption("overlap-threshold", "Overlap distance threshold, if a vector is this times nearer to a cluster then don't add it to more clusters")
+            .DefaultValue(0.85).StoreResult(&OverlapThreshold);
     };
 
     switch (commandType) {
