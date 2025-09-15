@@ -279,6 +279,31 @@ std::vector<ui64> FindClustersWithLevelsCache(const std::vector<TCentroidData>& 
     return selectedClusterIds;
 }
 
+static std::vector<std::pair<float, ui64>> calcDistances(const TVectorWorkloadParams& params, const std::vector<float>& queryVector, const std::unordered_map<ui64, TCentroidData>& centroids) {
+    std::vector<std::pair<float, ui64>> clusterDistances;
+    clusterDistances.reserve(centroids.size());
+
+    for (const auto& cp : centroids) {
+        const auto& centroid = cp.second;
+        float distance = CalculateDistanceFast(queryVector, centroid.Centroid, params.Metric);
+        clusterDistances.emplace_back(distance, centroid.Id);
+    }
+
+    // Sort clusters by distance (ascending for distances, descending for similarities)
+    auto [functionName, isAscending] = GetMetricInfo(params.Metric);
+    if (!isAscending) {
+        // For similarities (higher is better), sort in descending order
+        std::sort(clusterDistances.begin(), clusterDistances.end(),
+                 [](const auto& a, const auto& b) { return a.first > b.first; });
+    } else {
+        // For distances (lower is better), sort in ascending order
+        std::sort(clusterDistances.begin(), clusterDistances.end(),
+                 [](const auto& a, const auto& b) { return a.first < b.first; });
+    }
+    assert(isAscending);
+
+    return clusterDistances;
+}
 
 // Utility function to apply overlapping clusters heuristic to posting table
 // This modifies the indexImplPostingTable by adding vectors to additional clusters
@@ -297,9 +322,9 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params) {
     Cout << "Loaded " << centroids.size() << " centroids" << Endl;
 
     // Create a map from cluster ID to centroid for quick lookup
-    std::unordered_map<ui64, TCentroidData> centroidMap;
+    std::unordered_map<ui64, std::unordered_map<ui64, TCentroidData>> centroidMap;
     for (const auto& centroid : centroids) {
-        centroidMap[centroid.Id] = centroid;
+        centroidMap[centroid.ParentId][centroid.Id] = centroid;
     }
 
     // Load actual vectors from posting table in small batches to avoid TResultSetParser issues
@@ -443,62 +468,22 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params) {
                 std::vector<float> queryVector = ParseEmbeddingToVector(embedding);
 
                 // Calculate distances from this vector to all centroids
-                std::vector<std::pair<float, ui64>> clusterDistances;
-                clusterDistances.reserve(centroids.size());
-
-                for (const auto& centroid : centroids) {
-                    float distance = CalculateDistanceFast(queryVector, centroid.Centroid, params.Metric);
-                    clusterDistances.emplace_back(distance, centroid.Id);
-                }
-
-                // Sort clusters by distance (ascending for distances, descending for similarities)
-                auto [functionName, isAscending] = GetMetricInfo(params.Metric);
-                if (!isAscending) {
-                    // For similarities (higher is better), sort in descending order
-                    std::sort(clusterDistances.begin(), clusterDistances.end(),
-                             [](const auto& a, const auto& b) { return a.first > b.first; });
-                } else {
-                    // For distances (lower is better), sort in ascending order
-                    std::sort(clusterDistances.begin(), clusterDistances.end(),
-                             [](const auto& a, const auto& b) { return a.first < b.first; });
-                }
+                auto clusterDistances = calcDistances(params, queryVector, centroidMap[0]);
 
                 // Apply overlapping clusters heuristic
-                std::vector<ui64> selectedClusters;
                 std::vector<ui64> selectedClusterIds; // Keep track of selected cluster IDs for distance calculations
                 std::vector<float> selectedDistances;
 
-                // Add the original cluster first
-                selectedClusters.push_back(originalClusterId);
-                selectedClusterIds.push_back(originalClusterId);
-                for (auto& [d, c]: clusterDistances) {
-                    if (c == originalClusterId) {
-                        selectedDistances.push_back(d);
-                        break;
-                    }
-                }
-                Y_ABORT_UNLESS(selectedDistances.size() == 1);
-
                 size_t searchLimit = std::min(params.OverlappingClusters, clusterDistances.size());
 
-                for (size_t j = 0; j < searchLimit && selectedClusters.size() < params.OverlappingClusters; ++j) {
+                // Try to add the item into <OverlappingClusters> top-level clusters
+                for (size_t j = 0; j < searchLimit; ++j) {
                     const auto& [distance, clusterId] = clusterDistances[j];
-
-                    // Skip if this is the original cluster (already added)
-                    if (clusterId == originalClusterId) {
-                        continue;
-                    }
-
-                    auto currentCentroidIt = centroidMap.find(clusterId);
-                    if (currentCentroidIt == centroidMap.end()) {
-                        continue; // Skip invalid cluster IDs
-                    }
 
                     bool shouldSkip = false;
 
                     // Check the heuristic: skip cluster i if there's a cluster j<i such that
                     // cluster j is closer to cluster i than the vector is to cluster i
-                    //for (ui64 selectedClusterId : selectedClusterIds) {
                     for (size_t k = 0; k < selectedClusterIds.size(); k++) {
                         auto selectedClusterId = selectedClusterIds[k];
                         auto selectedDistance = selectedDistances[k];
@@ -507,12 +492,6 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params) {
                             continue;
                         }
 
-                        /*// Calculate distance between selected cluster and current cluster
-                        float clusterToClusterDist = CalculateDistanceFast(
-                            selectedCentroidIt->second.Centroid,
-                            currentCentroidIt->second.Centroid,
-                            params.Metric);*/
-
                         // Calculate distance between vector and current cluster (we already have this)
                         float vectorToClusterDist = distance;
 
@@ -520,7 +499,6 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params) {
                         // For similarity metrics (higher is better), skip if cluster j is more similar to cluster i than vector
                         // Modified to use threshold factor to make it less strict
                         bool skipCondition = false;
-                        assert(isAscending);
                         /*
                         if (isAscending) {
                             // Distance metric: skip if cluster-to-cluster distance < vector-to-cluster distance * thresholdFactor
@@ -539,10 +517,24 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params) {
                     }
 
                     if (!shouldSkip) {
-                        selectedClusters.push_back(clusterId);
                         selectedClusterIds.push_back(clusterId);
                         selectedDistances.push_back(distance);
-                        // Add new entry for this cluster (excluding the original cluster)
+                    }
+                }
+
+                for (size_t i = 0; i < selectedClusterIds.size(); i++) {
+                    while (centroidMap.contains(selectedClusterIds[i])) {
+                        // Descend to the next level and select 1 nearest cluster
+                        clusterDistances = calcDistances(params, queryVector, centroidMap[selectedClusterIds[i]]);
+                        clusterDistances.resize(1);
+                        selectedClusterIds[i] = clusterDistances.at(0).second;
+                        selectedDistances[i] = clusterDistances.at(0).first;
+                    }
+                }
+
+                for (auto& clusterId: selectedClusterIds) {
+                    // Add new entry for this cluster (excluding the original cluster)
+                    if (originalClusterId != clusterId) {
                         localNewEntries.emplace_back(clusterId, vectorId, embedding);
                         localNewEntriesCount++;
                     }
@@ -653,7 +645,6 @@ TVector<TCentroidData> LoadCentroidsFromLevelTable(const TVectorWorkloadParams& 
     TString query = TStringBuilder()
         << "--!syntax_v1\n"
         << "SELECT __ydb_id, __ydb_parent, __ydb_centroid FROM `" << params.TableName << "/" << params.IndexName<< "/indexImplLevelTable`\n"
-        << "WHERE __ydb_id IN (SELECT __ydb_parent FROM `" << params.TableName << "/" << params.IndexName<< "/indexImplPostingTable`)"
         ;
 
     std::optional<NYdb::TResultSet> resultSet;
