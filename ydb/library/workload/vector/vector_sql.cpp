@@ -289,6 +289,14 @@ static std::vector<std::pair<float, ui64>> calcDistances(const TVectorWorkloadPa
         clusterDistances.emplace_back(distance, centroid.Id);
     }
 
+    return clusterDistances;
+}
+
+static void filterOverlappingClusters(const TVectorWorkloadParams& params, std::vector<std::pair<float, ui64>>& clusterDistances) {
+    if (clusterDistances.size() <= 1) {
+        return;
+    }
+
     // Sort clusters by distance (ascending for distances, descending for similarities)
     auto [functionName, isAscending] = GetMetricInfo(params.Metric);
     if (!isAscending) {
@@ -302,7 +310,37 @@ static std::vector<std::pair<float, ui64>> calcDistances(const TVectorWorkloadPa
     }
     assert(isAscending);
 
-    return clusterDistances;
+    if (clusterDistances.size() > params.OverlappingClusters) {
+        clusterDistances.resize(params.OverlappingClusters);
+    }
+    if (!(clusterDistances[0].second & 0x8000000000000000ul)) {
+        // Only apply the heuristic at the leaf level
+        if (params.OverlapType == "leaf") {
+            clusterDistances.resize(1);
+        }
+        return;
+    }
+
+    // Try to add the item into <OverlappingClusters> top-level clusters
+    for (size_t j = 0; j < clusterDistances.size(); j++) {
+        const auto& [distance, clusterId] = clusterDistances[j];
+
+        bool shouldSkip = false;
+
+        // Check the heuristic: skip cluster i if there's a cluster j<i such that
+        // cluster j is closer to cluster i than the vector is to cluster i
+        for (size_t k = 0; k < j; k++) {
+            const auto& [selectedDistance, selectedClusterId] = clusterDistances[k];
+            if (selectedDistance < distance * params.OverlapThreshold) {
+                shouldSkip = true;
+                break;
+            }
+        }
+
+        if (shouldSkip) {
+            clusterDistances.erase(clusterDistances.begin()+j);
+        }
+    }
 }
 
 // Utility function to apply overlapping clusters heuristic to posting table
@@ -469,73 +507,31 @@ void ApplyOverlappingClustersHeuristic(const TVectorWorkloadParams& params) {
 
                 // Calculate distances from this vector to all centroids
                 auto clusterDistances = calcDistances(params, queryVector, centroidMap[0]);
+                filterOverlappingClusters(params, clusterDistances);
 
-                // Apply overlapping clusters heuristic
-                std::vector<ui64> selectedClusterIds; // Keep track of selected cluster IDs for distance calculations
-                std::vector<float> selectedDistances;
-
-                size_t searchLimit = std::min(params.OverlappingClusters, clusterDistances.size());
-
-                // Try to add the item into <OverlappingClusters> top-level clusters
-                for (size_t j = 0; j < searchLimit; ++j) {
-                    const auto& [distance, clusterId] = clusterDistances[j];
-
-                    bool shouldSkip = false;
-
-                    // Check the heuristic: skip cluster i if there's a cluster j<i such that
-                    // cluster j is closer to cluster i than the vector is to cluster i
-                    for (size_t k = 0; k < selectedClusterIds.size(); k++) {
-                        auto selectedClusterId = selectedClusterIds[k];
-                        auto selectedDistance = selectedDistances[k];
-                        auto selectedCentroidIt = centroidMap.find(selectedClusterId);
-                        if (selectedCentroidIt == centroidMap.end()) {
-                            continue;
+                while (!(clusterDistances[0].second & 0x8000000000000000ul)) {
+                    std::vector<std::pair<float, ui64>> nextDistances;
+                    for (size_t i = 0; i < clusterDistances.size(); i++) {
+                        auto childDistances = calcDistances(params, queryVector, centroidMap[clusterDistances[i].second]);
+                        if (params.OverlapType == "root") {
+                            std::sort(childDistances.begin(), childDistances.end(),
+                                [](const auto& a, const auto& b) { return a.first < b.first; });
+                            childDistances.resize(1);
+                        } else if (params.OverlapType == "multiply") {
+                            filterOverlappingClusters(params, childDistances);
                         }
-
-                        // Calculate distance between vector and current cluster (we already have this)
-                        float vectorToClusterDist = distance;
-
-                        // For distance metrics (lower is better), skip if cluster j is closer to cluster i than vector
-                        // For similarity metrics (higher is better), skip if cluster j is more similar to cluster i than vector
-                        // Modified to use threshold factor to make it less strict
-                        bool skipCondition = false;
-                        /*
-                        if (isAscending) {
-                            // Distance metric: skip if cluster-to-cluster distance < vector-to-cluster distance * thresholdFactor
-                            skipCondition = (clusterToClusterDist < vectorToClusterDist * thresholdFactor);
-                        } else {
-                            // Similarity metric: skip if cluster-to-cluster similarity > vector-to-cluster similarity * thresholdFactor
-                            skipCondition = (clusterToClusterDist > vectorToClusterDist * thresholdFactor);
-                        }
-                        */
-                        skipCondition = (selectedDistance < vectorToClusterDist * params.OverlapThreshold);
-
-                        if (skipCondition) {
-                            shouldSkip = true;
-                            break;
-                        }
+                        nextDistances.insert(nextDistances.end(), childDistances.begin(), childDistances.end());
                     }
-
-                    if (!shouldSkip) {
-                        selectedClusterIds.push_back(clusterId);
-                        selectedDistances.push_back(distance);
+                    if (params.OverlapType != "root" && params.OverlapType != "multiply") {
+                        filterOverlappingClusters(params, nextDistances);
                     }
+                    clusterDistances = std::move(nextDistances);
                 }
 
-                for (size_t i = 0; i < selectedClusterIds.size(); i++) {
-                    while (centroidMap.contains(selectedClusterIds[i])) {
-                        // Descend to the next level and select 1 nearest cluster
-                        clusterDistances = calcDistances(params, queryVector, centroidMap[selectedClusterIds[i]]);
-                        clusterDistances.resize(1);
-                        selectedClusterIds[i] = clusterDistances.at(0).second;
-                        selectedDistances[i] = clusterDistances.at(0).first;
-                    }
-                }
-
-                for (auto& clusterId: selectedClusterIds) {
+                for (auto& cluster: clusterDistances) {
                     // Add new entry for this cluster (excluding the original cluster)
-                    if (originalClusterId != clusterId) {
-                        localNewEntries.emplace_back(clusterId, vectorId, embedding);
+                    if (originalClusterId != cluster.second) {
+                        localNewEntries.emplace_back(cluster.second, vectorId, embedding);
                         localNewEntriesCount++;
                     }
                 }

@@ -58,9 +58,11 @@ void TVectorWorkloadParams::ConfigureOpts(NLastGetopt::TOpts& opts, const EComma
             .StoreTrue(&StaleRO);
         opts.AddLongOption( "levels-cache", "Cache levels table in memory for faster search.")
             .StoreTrue(&LevelsCache);
-        opts.AddLongOption("overlapping-clusters", "Apply overlapping clusters heuristic, try to add vector into this number of clusters")
+        opts.AddLongOption( "overlapping-clusters", "Apply overlapping clusters heuristic, try to add vector into this number of clusters")
             .DefaultValue(0).StoreResult(&OverlappingClusters);
-        opts.AddLongOption("overlap-threshold", "Overlap distance threshold, if a vector is this times nearer to a cluster then don't add it to more clusters")
+        opts.AddLongOption( "overlap-type", "Specify heuristic type: all - select nearest clusters at each level, root - select only at the root level, leaf - select only at the leaf level, multiply - O^levels nearest clusters instead of just O")
+            .DefaultValue("all").StoreResult(&OverlapType);
+        opts.AddLongOption( "overlap-threshold", "Overlap distance threshold, if a vector is this times nearer to a cluster then don't add it to more clusters")
             .DefaultValue(0.85).StoreResult(&OverlapThreshold);
     };
 
@@ -135,6 +137,9 @@ void TVectorWorkloadParams::Init() {
             KeyIsInt = (column.Type.ToString().contains("int") || column.Type.ToString().contains("Int"));
         }
     }
+
+    Y_ABORT_UNLESS((OverlapType == "all" || OverlapType == "root" || OverlapType == "leaf" || OverlapType == "multiply"),
+        "--overlap-type %s is not supported", OverlapType.c_str());
 
     if (!TableRowCount) {
         TableRowCount = tableDescription.GetTableRows();

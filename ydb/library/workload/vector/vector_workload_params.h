@@ -54,6 +54,7 @@ public:
     bool StaleRO = false;
     bool KeyIsInt = false;
     bool LevelsCache = false;
+    std::string OverlapType = "all";
     size_t OverlappingClusters = 0;
     float OverlapThreshold = 0.85;
 };
