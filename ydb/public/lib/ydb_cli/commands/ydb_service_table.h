@@ -189,6 +189,8 @@ protected:
     TString IndexName;
     TString Columns;
     TString DataColumns;
+    ui64 IndexShards = 0;
+    ui64 IndexSplitSizeMb = 0;
 private:
     const NTable::EIndexType IndexType;
 };
@@ -201,6 +203,11 @@ public:
 class TCommandIndexAddGlobalAsync : public TCommandIndexAddGlobal {
 public:
     TCommandIndexAddGlobalAsync();
+};
+
+class TCommandIndexAddGlobalJson : public TCommandIndexAddGlobal {
+public:
+    TCommandIndexAddGlobalJson();
 };
 
 class TCommandIndexDrop : public TYdbCommand, public TCommandWithPath {

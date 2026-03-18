@@ -14,6 +14,7 @@
 #include <ydb/public/lib/stat_visualization/flame_graph_builder.h>
 #include <ydb/public/sdk/cpp/include/ydb-cpp-sdk/client/proto/accessor.h>
 
+#include <library/cpp/string_utils/base64/base64.h>
 #include <library/cpp/json/json_prettifier.h>
 #include <library/cpp/json/json_writer.h>
 
@@ -75,6 +76,7 @@ TCommandIndexAdd::TCommandIndexAdd()
 {
     AddCommand(std::make_unique<TCommandIndexAddGlobalSync>());
     AddCommand(std::make_unique<TCommandIndexAddGlobalAsync>());
+    AddCommand(std::make_unique<TCommandIndexAddGlobalJson>());
 }
 
 TTableCommand::TTableCommand(const TString& name, const std::initializer_list<TString>& aliases, const TString& description)
@@ -1296,6 +1298,10 @@ void TCommandIndexAddGlobal::Config(TConfig& config) {
 
     config.Opts->AddLongOption("index-name", "Name of index to add.")
         .RequiredArgument("NAME").StoreResult(&IndexName);
+    config.Opts->AddLongOption("index-shards", "Initial index table shard count.")
+        .StoreResult(&IndexShards);
+    config.Opts->AddLongOption("index-shard-size", "Index table shard size to split at (in MB).")
+        .StoreResult(&IndexSplitSizeMb);
     config.Opts->AddLongOption("columns", "Ordered comma separated list of columns to build index for")
         .RequiredArgument("CSV").StoreResult(&Columns);
     config.Opts->AddLongOption("cover", "Ordered comma separated list of cover columns. (Data for those columns will be duplicated to index)")
@@ -1325,8 +1331,44 @@ int TCommandIndexAddGlobal::Run(TConfig& config) {
         dataColumns = StringSplitter(DataColumns).Split(',').ToList<std::string>();
     }
 
+    NTable::TGlobalIndexSettings partitioning;
+    /*if (IndexSplitSizeMb || IndexShards) {
+        Ydb::Table::PartitioningSettings proto;
+        proto.set_partitioning_by_size(Ydb::FeatureFlag::ENABLED);
+        if (IndexSplitSizeMb) {
+            proto.set_partition_size_mb(IndexSplitSizeMb);
+        }
+        if (IndexShards) {
+            proto.set_min_partitions_count(IndexShards);
+        }
+        partitioning.PartitioningSettings = NTable::TPartitioningSettings(proto);
+    }*/
+    NTable::TExplicitPartitions partitions;
+    TVector<TString> parts = {
+        "BGRhdGUAAzIwMTUtMDYtMDhUMTM6Mw==",
+        "BmFycmVzdAAA",
+        "CGRvbWVzdGljAAE=",
+        "CGxvY2F0aW9uAAI=",
+        "CGxvY2F0aW9uAAN7IiJhZGRyZXNzIiI6ICIiIiIsICIiY2l0eSIiOiAiIiIiLCAiInN0YXRlIiI6ICIiIiI=",
+        "CnVwZGF0ZWRfb24AAzIwMTgtMDItMTBUMTU6NTA6MDE=",
+        "Czp1cGRhdGVkX2F0AAQAAIDJ4kDZQQ==",
+        "DHByaW1hcnlfdHlwZQADREVDRVBUSVZFIFBSQUNUSUNF",
+        "DTpjcmVhdGVkX21ldGEAAg==",
+        "FGxvY2F0aW9uX2Rlc2NyaXB0aW9uAANQQVJLSU5HIExPVC9HQVJBR0UoTk9OLlJFU0lELik=",
+        "GzpAY29tcHV0ZWRfcmVnaW9uX2F3YWZfczd1eAADOQ==",
+        "GzpAY29tcHV0ZWRfcmVnaW9uX2Q5bW1famd3cAADMg==",
+        "GzpAY29tcHV0ZWRfcmVnaW9uXzZta3ZfZjNkdwADMjE4NjE=",
+    };
+    for (auto& p : parts) {
+        p = Base64StrictDecode(p);
+    }
+    std::sort(parts.begin(), parts.end());
+    for (auto& p : parts) {
+        partitions.AppendSplitPoints(TValueBuilder{}.BeginTuple().AddElement().OptionalString(p).EndTuple().Build());
+    }
+    partitioning.Partitions = std::move(partitions);
     auto settings = NTable::TAlterTableSettings()
-        .AppendAddIndexes({NTable::TIndexDescription(IndexName, IndexType, columns, dataColumns)});
+        .AppendAddIndexes({NTable::TIndexDescription(IndexName, IndexType, columns, dataColumns, {partitioning})});
     auto session = client.GetSession().GetValueSync();
     NStatusHelpers::ThrowOnErrorOrPrintIssues(session);
     auto opResult = session.GetSession().AlterTableLong(Path, settings).GetValueSync();
@@ -1342,6 +1384,10 @@ TCommandIndexAddGlobalSync::TCommandIndexAddGlobalSync()
 
 TCommandIndexAddGlobalAsync::TCommandIndexAddGlobalAsync()
     : TCommandIndexAddGlobal(NTable::EIndexType::GlobalAsync, "global-async", {}, "Add global async index. The command returns operation")
+{}
+
+TCommandIndexAddGlobalJson::TCommandIndexAddGlobalJson()
+    : TCommandIndexAddGlobal(NTable::EIndexType::GlobalJson, "global-json", {}, "Add global JSON index. The command returns operation")
 {}
 
 TCommandIndexDrop::TCommandIndexDrop()
