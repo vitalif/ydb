@@ -11,7 +11,10 @@ SRCS(
     dbs_loadstate.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/nbs/cloud/blockstore/libs/storage/core
     ydb/core/nbs/cloud/blockstore/libs/storage/dbs_controller/protos
     ydb/core/base

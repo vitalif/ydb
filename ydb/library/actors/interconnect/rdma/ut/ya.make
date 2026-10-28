@@ -18,7 +18,10 @@ SRCS(
     rdma_low_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/ibdrv
     ydb/library/actors/core
     ydb/library/actors/interconnect

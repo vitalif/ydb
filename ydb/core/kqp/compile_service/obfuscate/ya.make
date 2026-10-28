@@ -4,7 +4,10 @@ SRCS(
     obfuscate.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/protos
     yql/essentials/core/sql_types
     yql/essentials/parser/proto_ast/gen/v1_proto_split_antlr4

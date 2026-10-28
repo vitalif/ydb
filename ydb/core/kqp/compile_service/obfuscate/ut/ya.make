@@ -6,7 +6,10 @@ SRCS(
     obfuscate_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/protos
     library/cpp/json
     library/cpp/string_utils/base64

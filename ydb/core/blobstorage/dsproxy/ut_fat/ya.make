@@ -7,7 +7,10 @@ SPLIT_FACTOR(30)
 REQUIREMENTS(cpu:2)
 SIZE(MEDIUM)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/interconnect/mock
     ydb/library/actors/protos
     ydb/library/actors/util

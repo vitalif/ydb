@@ -4,7 +4,10 @@ FORK_SUBTESTS()
 
 SIZE(MEDIUM)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/http/io
     library/cpp/http/server
     library/cpp/svnversion

@@ -11,7 +11,10 @@ TAG(ya:fat)
 
 REQUIREMENTS(cpu:4 ram:8)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/blobstorage/ddisk
     ydb/core/blobstorage/pdisk
     ydb/core/blobstorage/crypto

@@ -118,7 +118,10 @@ IF (KIKIMR_TABLET_BORROW_WITHOUT_META)
     )
 ENDIF()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/protobuf
     ydb/library/actors/util
     ydb/library/actors/core

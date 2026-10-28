@@ -9,7 +9,10 @@ SRCS(
     http_database_access_verdict.h
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/path_aliasing
     ydb/library/grpc/server
     library/cpp/string_utils/quote

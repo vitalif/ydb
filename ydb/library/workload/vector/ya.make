@@ -12,7 +12,10 @@ SRCS(
     vector.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/apache/arrow
     library/cpp/colorizer
     ydb/library/formats/arrow/csv/converter

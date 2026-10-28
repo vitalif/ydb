@@ -7,7 +7,10 @@ SRCS(
     yql_pq_session.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/yql/providers/common/token_accessor/client
     ydb/library/yql/providers/pq/cm_client
     ydb/library/yql/providers/pq/gateway/abstract

@@ -7,7 +7,10 @@ SRCS(
     minikql_engine_host.h
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/base
     ydb/core/client/minikql_compile
     ydb/core/engine

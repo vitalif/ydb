@@ -180,7 +180,10 @@ JOIN_SRCS(
     rpc_whoami.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/xxhash
     library/cpp/cgiparam
     library/cpp/digest/old_crc

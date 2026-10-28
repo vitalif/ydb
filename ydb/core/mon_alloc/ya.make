@@ -12,7 +12,10 @@ IF (OS_LINUX AND ARCH_X86_64)
     CFLAGS(
         -DUSE_DWARF_BACKTRACE
     )
+    USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
     PEERDIR(
+        ydb/core/pch
         library/cpp/dwarf_backtrace
     )
 ENDIF()

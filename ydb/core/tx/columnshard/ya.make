@@ -34,7 +34,10 @@ SRCS(
 GENERATE_ENUM_SERIALIZATION(columnshard.h)
 GENERATE_ENUM_SERIALIZATION(columnshard_impl.h)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/monlib/service/pages
     ydb/core/actorlib_impl
     ydb/core/base

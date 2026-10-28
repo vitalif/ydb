@@ -49,7 +49,10 @@ ALL_RESOURCE_FILES_FROM_DIRS(
     s100_canonical
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/charset/lite
     library/cpp/resource
     ydb/library/accessor

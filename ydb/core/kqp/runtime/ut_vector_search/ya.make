@@ -12,7 +12,10 @@ SRCS(
 # PG support is required (TScopedAlloc's constructor calls PgInitializeMainContext), but a
 # stub suffices: ydb/core/testlib/basics/pg would pull the real pg_wrapper, whose PROVIDES
 # clashes with pg_dummy's anyway.
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/testing/unittest
     ydb/core/testlib/actors
     ydb/core/testlib/basics

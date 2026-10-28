@@ -158,7 +158,10 @@ JOIN_SRCS(
     tx__sync_tablets.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/aclib
     ydb/library/actors/core
     ydb/library/actors/interconnect

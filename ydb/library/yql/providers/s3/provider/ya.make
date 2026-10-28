@@ -19,7 +19,10 @@ SRCS(
     yql_s3_settings.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/re2
     library/cpp/json
     library/cpp/protobuf/util

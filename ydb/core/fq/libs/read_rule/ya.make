@@ -5,7 +5,10 @@ SRCS(
     read_rule_deleter.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/fq/libs/events
     ydb/core/protos
     ydb/library/actors/core

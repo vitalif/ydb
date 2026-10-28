@@ -7,7 +7,10 @@ SRCS(
     hive_metastore_fetcher.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/threading/future
     ydb/core/external_sources/hive_metastore/hive_metastore_native
     ydb/library/actors/core

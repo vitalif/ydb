@@ -13,7 +13,10 @@ IF (NOT WITH_VALGRIND)
         SIZE(MEDIUM)
     ENDIF()
 
+    USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
     PEERDIR(
+        ydb/core/pch
         ydb/core/testlib/default
         ydb/core/tx/schemeshard/ut_helpers
         ydb/core/test_tablet

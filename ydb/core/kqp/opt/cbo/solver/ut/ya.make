@@ -6,7 +6,10 @@ SRCS(
     kqp_opt_interesting_orderings_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/opt/cbo/solver
     ydb/core/kqp/opt/cbo
     yql/essentials/providers/common/provider

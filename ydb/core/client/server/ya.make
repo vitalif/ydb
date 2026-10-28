@@ -42,7 +42,10 @@ SRCS(
     ic_nodes_cache_service.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/helpers
     library/cpp/json
     library/cpp/messagebus

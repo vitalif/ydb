@@ -2,7 +2,10 @@ UNITTEST_FOR(ydb/core/tx/columnshard/backup/iscan)
 
 FORK_SUBTESTS()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/apps/ydbd/export
     ydb/core/testlib/actors
     ydb/core/testlib/default

@@ -7,7 +7,10 @@ SRCS(
     read_context.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/protos
     ydb/core/resource_pools
     ydb/core/tx/columnshard/column_fetching

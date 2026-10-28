@@ -20,7 +20,10 @@ SRCS(
     describe_topic_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/testlib/default
     ydb/core/client/server
     ydb/core/persqueue/public/describer

@@ -4,7 +4,10 @@ SRCS(
     synchronization_service.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/fq/libs/compute/common
     ydb/core/fq/libs/control_plane_storage/proto
     ydb/core/fq/libs/quota_manager/proto

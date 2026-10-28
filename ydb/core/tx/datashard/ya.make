@@ -444,7 +444,10 @@ RESOURCE(
     ui/index.html datashard/index.html
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/zstd
     library/cpp/containers/absl
     library/cpp/containers/stack_vector

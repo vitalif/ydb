@@ -4,7 +4,10 @@ SRCS(
     common.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/persqueue/public/mlp
     ydb/core/testlib/actors
     ydb/public/sdk/cpp/src/client/persqueue_public/ut/ut_utils

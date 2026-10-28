@@ -8,7 +8,10 @@ SRCS(
     validation_functions.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/yql/providers/ydb_external/common
     contrib/libs/apache/arrow
     library/cpp/regex/pcre

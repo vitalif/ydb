@@ -3,7 +3,10 @@ UNITTEST_FOR(ydb/core/sys_view/processor)
 FORK_SUBTESTS()
 SIZE(MEDIUM)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/testing/unittest
     ydb/core/tablet_flat/test/libs/table
     ydb/core/testlib

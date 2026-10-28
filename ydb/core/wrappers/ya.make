@@ -17,7 +17,10 @@ ELSE()
         retry_policy.cpp
         unavailable_storage.cpp
     )
+    USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
     PEERDIR(
+        ydb/core/pch
         contrib/libs/aws-sdk-cpp/aws-cpp-sdk-s3
         contrib/libs/curl
         library/cpp/monlib/dynamic_counters

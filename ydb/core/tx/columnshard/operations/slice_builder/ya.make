@@ -5,7 +5,10 @@ SRCS(
     pack_builder.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/tx/conveyor/usage
     ydb/core/tx/data_events
     ydb/core/formats/arrow

@@ -7,7 +7,10 @@ SRCS(
     ut_tier_predicate_pg.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/scheme
     ydb/core/tablet_flat/test/libs/table
     yql/essentials/public/udf/service/exception_policy

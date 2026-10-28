@@ -18,7 +18,10 @@ SRCS(
 
 GENERATE_ENUM_SERIALIZATION(column_engine_logs.h)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/apache/arrow
     ydb/core/base
     ydb/core/formats

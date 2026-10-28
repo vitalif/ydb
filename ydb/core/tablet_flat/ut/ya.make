@@ -73,7 +73,10 @@ RESOURCE(
     ../test/data/008_basics_db.redo abi/008_basics_db.redo
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     yql/essentials/types/binary_json
     library/cpp/resource
     ydb/core/scheme

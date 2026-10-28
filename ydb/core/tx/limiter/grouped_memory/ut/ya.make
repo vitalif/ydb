@@ -2,7 +2,10 @@ UNITTEST_FOR(ydb/core/tx/limiter/grouped_memory)
 
 SIZE(SMALL)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/tx/limiter/grouped_memory/usage
     yql/essentials/public/udf/service/stub
     yql/essentials/parser/pg_wrapper

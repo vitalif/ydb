@@ -8,7 +8,10 @@ SRCS(
     metadata.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/openssl
     library/cpp/json
     ydb/core/backup/common/proto

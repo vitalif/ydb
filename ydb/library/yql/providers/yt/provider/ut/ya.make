@@ -4,7 +4,10 @@ SRCS(
     provider_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     yt/yql/providers/yt/provider
     yt/yql/providers/yt/codec/codegen/llvm16
     yql/essentials/minikql/computation/llvm16

@@ -7,7 +7,10 @@ SRCS(
     kqp_ydb_external_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/grpc
     ydb/core/grpc_services/local_rpc
     ydb/core/kqp/ut/common

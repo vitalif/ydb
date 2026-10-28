@@ -13,7 +13,10 @@ TIMEOUT(600)
 
 ENV(PQ_EXPERIMENTAL_DIRECT_READ="1")
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/testing/unittest
     library/cpp/threading/future
     ydb/core/persqueue/events

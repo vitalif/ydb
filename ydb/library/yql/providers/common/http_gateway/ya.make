@@ -9,7 +9,10 @@ SRCS(
     yql_http_pool_cap_pusher.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/curl
     library/cpp/monlib/dynamic_counters
     library/cpp/retry

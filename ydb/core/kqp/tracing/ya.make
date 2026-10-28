@@ -8,7 +8,10 @@ SRCS(
     kqp_task_rendering.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/time_provider
     ydb/core/kqp/common/simple
     ydb/core/protos

@@ -7,7 +7,10 @@ SRCS(
 
 GENERATE_ENUM_SERIALIZATION(yql_s3_list.h)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/re2
     library/cpp/string_utils/quote
     library/cpp/xml/document

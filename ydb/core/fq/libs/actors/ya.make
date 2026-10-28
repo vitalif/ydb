@@ -17,7 +17,10 @@ SRCS(
     task_result_write.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/json/yson
     library/cpp/monlib/dynamic_counters
     library/cpp/random_provider

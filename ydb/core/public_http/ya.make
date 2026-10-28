@@ -11,7 +11,10 @@ SRCS(
     grpc_request_context_wrapper.h
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/core
     ydb/library/actors/http
     library/cpp/protobuf/json

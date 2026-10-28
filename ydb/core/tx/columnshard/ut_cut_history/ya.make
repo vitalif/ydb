@@ -3,7 +3,10 @@ UNITTEST_FOR(ydb/core/tx/columnshard)
 FORK_SUBTESTS()
 SIZE(MEDIUM)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/testing/unittest
     ydb/core/testlib/default
     ydb/core/tx/columnshard/engines/storage/indexes/max

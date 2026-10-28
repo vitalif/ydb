@@ -7,7 +7,10 @@ SRCS(
     dq_opt_interesting_orderings_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/yql/dq/opt
     yql/essentials/sql/pg
     yql/essentials/parser/pg_wrapper

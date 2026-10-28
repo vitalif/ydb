@@ -1,4 +1,9 @@
 UNITTEST_FOR(ydb/core/subsystems/actor_system_monitoring)
 SRCS(viewer_ut.cpp)
-PEERDIR(ydb/library/actors/testlib)
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
+PEERDIR(
+    ydb/core/pch
+    ydb/library/actors/testlib
+)
 END()

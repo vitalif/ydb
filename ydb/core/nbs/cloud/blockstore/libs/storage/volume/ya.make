@@ -9,7 +9,10 @@ SRCS(
     volume_store_partition_tablet_id.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/nbs/cloud/blockstore/libs/kikimr
     ydb/core/nbs/cloud/blockstore/libs/service
     ydb/core/nbs/cloud/blockstore/libs/storage/api

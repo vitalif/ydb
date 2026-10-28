@@ -26,7 +26,10 @@ SRCS(
 GENERATE_ENUM_SERIALIZATION(read_table_impl.h)
 GENERATE_ENUM_SERIALIZATION(upload_rows_counters.h)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/core
     ydb/library/actors/helpers
     ydb/library/actors/interconnect

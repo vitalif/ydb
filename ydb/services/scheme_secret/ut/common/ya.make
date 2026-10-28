@@ -4,7 +4,10 @@ SRCS(
     helpers.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/public/sdk/cpp/src/client/table
     ydb/library/aclib
     ydb/core/kqp/common/events

@@ -8,7 +8,10 @@ UNITTEST_FOR(ydb/core/blob_depot)
             s3_router_ut.cpp
         )
 
+        USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
         PEERDIR(
+            ydb/core/pch
             ydb/core/blob_depot/agent
             ydb/core/testlib/default
             ydb/library/actors/http

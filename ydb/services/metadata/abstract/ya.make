@@ -13,7 +13,10 @@ SRCS(
 
 GENERATE_ENUM_SERIALIZATION(kqp_common.h)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/base
     ydb/library/accessor
     ydb/library/actors/core

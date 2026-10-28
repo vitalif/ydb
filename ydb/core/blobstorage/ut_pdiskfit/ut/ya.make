@@ -13,7 +13,10 @@ IF (OS_LINUX)
         MESSAGE(WARNING "It takes too much time to run test in DEBUG mode, some tests are skipped")
     ENDIF ()
 
+    USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
     PEERDIR(
+        ydb/core/pch
         ydb/apps/version
         ydb/core/blobstorage
         ydb/core/blobstorage/ut_pdiskfit/lib

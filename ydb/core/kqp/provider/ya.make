@@ -27,7 +27,10 @@ SRCS(
     yql_kikimr_type_ann_pg.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/base
     ydb/core/docapi
     ydb/core/external_sources

@@ -16,7 +16,10 @@ SRCS(
     predicate_collector.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/scheme
     ydb/core/kqp/common
     ydb/core/kqp/opt/physical/effects

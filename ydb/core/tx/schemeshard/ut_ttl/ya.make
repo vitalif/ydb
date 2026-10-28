@@ -11,7 +11,10 @@ ELSE()
     SIZE(MEDIUM)
 ENDIF()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/ut/common
     ydb/core/tx/schemeshard/ut_helpers
     yql/essentials/parser/pg_wrapper

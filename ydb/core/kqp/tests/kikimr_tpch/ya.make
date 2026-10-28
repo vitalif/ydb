@@ -16,7 +16,10 @@ SRCS(
     kqp_tpch_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/tests/tpch/lib
     library/cpp/testing/unittest
     ydb/core/protos

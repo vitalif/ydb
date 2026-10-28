@@ -7,7 +7,10 @@ SRCS(
     kqp_type_mismatch.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/public/api/grpc/draft
     ydb/public/sdk/cpp/src/library/operation_id/protos
     ydb/library/actors/core

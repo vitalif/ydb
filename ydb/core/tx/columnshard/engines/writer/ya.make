@@ -8,7 +8,10 @@ SRCS(
     write_controller.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/protos
     ydb/core/tablet_flat/protos
     ydb/core/blobstorage/vdisk/protos

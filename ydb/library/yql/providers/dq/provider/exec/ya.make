@@ -5,7 +5,10 @@ SRCS(
     yql_dq_exectransformer.h
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/digest/md5
     library/cpp/svnversion
     library/cpp/threading/future

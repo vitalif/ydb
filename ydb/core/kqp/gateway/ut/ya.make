@@ -4,7 +4,10 @@ SRCS(
     metadata_conversion.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/gateway
     yql/essentials/parser/pg_wrapper
     yql/essentials/public/udf/service/stub

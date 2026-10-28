@@ -1,6 +1,9 @@
 YQL_LIBRARY()
 SRCS(read_actor.cpp)
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/containers/disjoint_interval_tree
     ydb/library/actors/core
     ydb/library/services

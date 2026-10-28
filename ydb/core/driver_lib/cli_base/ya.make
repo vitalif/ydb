@@ -7,7 +7,10 @@ SRCS(
     cli_kicli.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/driver_lib/cli_config_base
     ydb/library/aclib
     ydb/public/lib/deprecated/kicli

@@ -17,7 +17,10 @@ SRCS(
     ydb_control_plane_storage_quotas.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/lwtrace
     library/cpp/protobuf/interop
     ydb/core/base

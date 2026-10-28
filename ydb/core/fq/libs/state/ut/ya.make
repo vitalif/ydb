@@ -4,7 +4,10 @@ SRCS(
     dq_state_load_plan_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/federated_query/actors/pq_checkpoint_provider_integration
     ydb/library/actors/testlib
     ydb/library/testlib/pq_helpers

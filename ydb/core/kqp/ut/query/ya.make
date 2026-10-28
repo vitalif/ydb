@@ -19,7 +19,10 @@ SRCS(
     kqp_write_affinity_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/statistics/ut_common
     ydb/library/yql/udfs/statistics_internal
     ydb/public/sdk/cpp/src/client/proto

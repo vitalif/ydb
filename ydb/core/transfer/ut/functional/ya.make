@@ -8,7 +8,10 @@ ENV(YDB_FEATURE_FLAGS="enable_topic_transfer")
 ENV(YDB_GRPC_SERVICES="replication")
 ENV(YDB_ADDITIONAL_LOG_CONFIGS="TRANSFER:DEBUG,REPLICATION_CONTROLLER:DEBUG,REPLICATION_SERVICE:DEBUG,PERSQUEUE:DEBUG,PQ_SCHEMA:DEBUG")
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/transfer/ut/common
 )
 

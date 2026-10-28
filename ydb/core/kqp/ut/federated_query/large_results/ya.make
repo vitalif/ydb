@@ -12,7 +12,10 @@ SRCS(
     kqp_scriptexec_results_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/aws-sdk-cpp/aws-cpp-sdk-s3
     ydb/core/kqp/ut/common
     ydb/core/kqp/ut/federated_query/common

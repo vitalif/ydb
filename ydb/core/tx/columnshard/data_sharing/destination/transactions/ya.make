@@ -7,7 +7,10 @@ SRCS(
     tx_finish_ack_from_initiator.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/tx/tiering
     ydb/core/tx/columnshard/data_sharing/protos
     ydb/core/tx/columnshard/tablet

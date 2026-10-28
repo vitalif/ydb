@@ -24,7 +24,10 @@ SRCS(
     kqp_online_ro_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp
     ydb/core/kqp/ut/common
     ydb/core/tx/columnshard/hooks/testing

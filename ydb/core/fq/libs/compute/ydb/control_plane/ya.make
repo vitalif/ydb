@@ -10,7 +10,10 @@ SRCS(
     ydbcp_grpc_client_actor.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/json
     ydb/core/fq/libs/compute/ydb/synchronization_service
     ydb/core/fq/libs/control_plane_storage/proto

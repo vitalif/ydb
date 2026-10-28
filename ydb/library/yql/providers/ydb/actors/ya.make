@@ -5,7 +5,10 @@ SRCS(
     yql_ydb_source_factory.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/scheme
     yql/essentials/minikql/computation
     ydb/library/yql/providers/common/token_accessor/client

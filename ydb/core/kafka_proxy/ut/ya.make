@@ -24,7 +24,10 @@ SRCS(
     ut_transaction_coordinator.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kafka_proxy
     ydb/core/security/certificate_check/test_utils
     ydb/core/persqueue/public/schema

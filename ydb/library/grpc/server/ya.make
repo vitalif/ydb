@@ -9,7 +9,10 @@ SRCS(
 
 GENERATE_ENUM_SERIALIZATION(grpc_request_base.h)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/protobuf_printer
     contrib/libs/grpc
     library/cpp/monlib/dynamic_counters/percentile

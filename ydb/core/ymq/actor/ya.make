@@ -58,7 +58,10 @@ SRCS(
     user_settings_reader.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/openssl
     contrib/libs/protobuf
     ydb/library/actors/core

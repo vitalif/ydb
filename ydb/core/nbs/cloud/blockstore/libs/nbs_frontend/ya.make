@@ -5,7 +5,10 @@ SRCS(
     partition_registry.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/nbs/cloud/blockstore/libs/common
     ydb/core/nbs/cloud/blockstore/libs/storage/model
     ydb/core/nbs/cloud/blockstore/libs/storage/model/nbs1_compat

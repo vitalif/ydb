@@ -6,7 +6,10 @@ SRCS(
     kqp_finalize_script_service.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/counters
     ydb/core/kqp/federated_query/actors
     ydb/core/kqp/script_executions/common

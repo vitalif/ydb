@@ -10,7 +10,10 @@ SRCS(
     kqp_statement_rewrite.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/yql/providers/ydb_external/common
     ydb/core/base
     ydb/core/kqp/common

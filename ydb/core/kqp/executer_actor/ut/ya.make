@@ -13,7 +13,10 @@ SRCS(
     max_tasks_graph_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/common
     ydb/core/kqp/ut/common
     yql/essentials/sql/pg_dummy

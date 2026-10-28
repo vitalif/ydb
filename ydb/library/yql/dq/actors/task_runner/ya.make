@@ -5,7 +5,10 @@ SRCS(
     task_runner_actor_local.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/core
     ydb/library/yql/dq/comp_nodes/operator_memory_quota
     ydb/library/yql/dq/runtime

@@ -7,7 +7,10 @@ SRCS(
     iterator.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/containers/absl
     ydb/core/tx/columnshard/engines/changes/compaction/common
     ydb/core/formats/arrow/accessor/dictionary

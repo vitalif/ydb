@@ -15,7 +15,10 @@ SRCS(
     kqp_indexes_json_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/fmt
     ydb/core/kqp
     ydb/core/kqp/ut/common

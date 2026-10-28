@@ -25,7 +25,10 @@ SRCS(
     tx_load_everything.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/t1ha
     library/cpp/json
     ydb/core/keyvalue

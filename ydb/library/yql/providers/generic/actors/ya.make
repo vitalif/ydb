@@ -7,7 +7,10 @@ SRCS(
     yql_generic_read_actor.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/yql/dq/actors/compute
     yql/essentials/minikql/computation
     yql/essentials/providers/common/structured_token

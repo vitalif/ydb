@@ -5,7 +5,10 @@ SRCS(
     physical_graph_rescaling.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/base
     ydb/core/fq/libs/credentials
     ydb/core/fq/libs/db_id_async_resolver_impl

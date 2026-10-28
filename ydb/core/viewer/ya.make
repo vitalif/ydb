@@ -846,7 +846,10 @@ RESOURCE(
     content/api/swagger-ui-standalone-preset.js viewer/api/swagger-ui-standalone-preset.js
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/yaml-cpp
     library/cpp/archive
     library/cpp/json

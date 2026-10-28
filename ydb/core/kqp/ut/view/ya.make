@@ -9,7 +9,10 @@ SRCS(
     view_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/ut/common
     yql/essentials/sql
     yql/essentials/sql/v1/translation

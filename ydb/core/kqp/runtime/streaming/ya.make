@@ -4,7 +4,10 @@ SRCS(
     kqp_streaming_aggregation.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/fmt
     library/cpp/threading/future
     ydb/core/kqp/runtime/common

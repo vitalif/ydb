@@ -9,7 +9,10 @@ RESOURCE(
     ydb/library/benchmarks/gen_queries/consts_decimal.yql consts_decimal.yql
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/resource
     library/cpp/streams/factory/open_by_signature
     ydb/library/accessor

@@ -1,6 +1,9 @@
 YQL_LIBRARY()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/string_utils/parse_size
     yql/essentials/minikql
     yql/essentials/utils

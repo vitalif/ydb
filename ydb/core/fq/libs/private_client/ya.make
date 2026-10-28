@@ -10,7 +10,10 @@ SRCS(
     private_client.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/monlib/dynamic_counters
     library/cpp/protobuf/json
     ydb/core/fq/libs/control_plane_storage/proto

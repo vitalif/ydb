@@ -6,7 +6,10 @@ TIMEOUT(600)
 
 SIZE(MEDIUM)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/base
     ydb/core/kqp/ut/common
     ydb/core/tx/schemeshard/ut_helpers

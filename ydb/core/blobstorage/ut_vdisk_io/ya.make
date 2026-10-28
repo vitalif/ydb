@@ -15,7 +15,10 @@ SRCS(
     vdisk_io.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/apps/version
     library/cpp/testing/unittest
     ydb/core/blobstorage/backpressure

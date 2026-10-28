@@ -6,7 +6,10 @@ SRCS(
     chunked_array_serialized.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/tx/columnshard/splitter/abstract
     ydb/core/tx/columnshard/splitter
     ydb/core/tx/columnshard/engines/scheme/versions

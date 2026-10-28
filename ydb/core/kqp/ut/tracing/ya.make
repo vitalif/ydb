@@ -9,7 +9,10 @@ SRCS(
     kqp_query_trace_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/tracing/test_util
     ydb/core/kqp/ut/common
     ydb/core/testlib/default

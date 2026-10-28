@@ -5,7 +5,10 @@ SRCS(
     read_stream.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/apache/arrow
     ydb/library/yql/providers/native
     ydb/library/yql/providers/ydb_external/common

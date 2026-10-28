@@ -7,7 +7,10 @@ SRCS(
     txallocator.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/helpers
     ydb/library/actors/interconnect
     ydb/core/actorlib_impl

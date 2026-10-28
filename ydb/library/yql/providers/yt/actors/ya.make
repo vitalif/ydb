@@ -5,7 +5,10 @@ SRCS(
     yql_yt_provider_factories.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     yql/essentials/minikql
     yql/essentials/minikql/computation
     yql/essentials/providers/common/provider

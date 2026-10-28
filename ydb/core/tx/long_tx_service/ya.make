@@ -10,7 +10,10 @@ SRCS(
     snapshots_storage.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/lwtrace
     library/cpp/lwtrace/mon
     ydb/core/base

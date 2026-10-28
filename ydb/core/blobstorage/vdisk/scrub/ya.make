@@ -22,7 +22,10 @@ SRCS(
     scrub_actor_unreadable.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/blobstorage/base
     ydb/core/blobstorage/vdisk/common
     ydb/core/blobstorage/vdisk/skeleton

@@ -10,7 +10,10 @@ SRCS(
     markov_model_evaluator.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/apache/arrow
     library/cpp/colorizer
     library/cpp/streams/factory/open_by_signature

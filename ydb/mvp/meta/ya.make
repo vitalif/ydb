@@ -9,7 +9,10 @@ SRCS(
     mvp.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/mvp/core
     ydb/mvp/meta/support_links
     ydb/mvp/meta/protos

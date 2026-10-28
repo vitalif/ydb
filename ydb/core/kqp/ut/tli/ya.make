@@ -9,7 +9,10 @@ SRCS(
     kqp_tli_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/ut/common
     ydb/library/actors/wilson/test_util
     yql/essentials/sql/pg_dummy

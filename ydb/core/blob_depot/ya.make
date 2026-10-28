@@ -69,7 +69,10 @@ LIBRARY()
         op_commit_blob_seq.cpp
     )
 
+    USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
     PEERDIR(
+        ydb/core/pch
         ydb/core/blobstorage/vdisk/common
         ydb/core/tablet_flat
         ydb/core/protos

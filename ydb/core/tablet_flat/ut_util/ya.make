@@ -8,7 +8,10 @@ SRCS(
     util_string_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     yql/essentials/public/decimal
     yql/essentials/public/udf/service/stub
     yql/essentials/sql/pg_dummy

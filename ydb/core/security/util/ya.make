@@ -6,7 +6,10 @@ SRCS(
     net.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/ipv6_address
     library/cpp/json/writer
     library/cpp/monlib/dynamic_counters

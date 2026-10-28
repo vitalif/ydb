@@ -1,6 +1,9 @@
 PROGRAM()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/getopt
     ydb/core/formats/arrow
     ydb/core/formats/arrow/accessor/common

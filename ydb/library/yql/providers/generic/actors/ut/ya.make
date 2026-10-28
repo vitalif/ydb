@@ -1,6 +1,9 @@
 UNITTEST_FOR(ydb/library/yql/providers/generic/actors)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/testing/unittest
     ydb/core/kqp/ut/federated_query/common
     ydb/library/actors/testlib

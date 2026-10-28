@@ -23,7 +23,10 @@ SRCS(
     mediator_queue.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/core
     ydb/library/actors/helpers
     ydb/library/actors/interconnect

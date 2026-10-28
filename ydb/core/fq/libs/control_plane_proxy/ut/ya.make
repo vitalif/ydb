@@ -2,7 +2,10 @@ UNITTEST_FOR(ydb/core/fq/libs/control_plane_proxy)
 
 SIZE(MEDIUM)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/testing/unittest
     ydb/core/base
     ydb/core/fq/libs/control_plane_proxy/actors

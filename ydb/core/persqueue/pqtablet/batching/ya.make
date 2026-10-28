@@ -6,7 +6,10 @@ SRCS(
     consumer_batch_processor.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/streams/zstd
     ydb/core/persqueue/common
     ydb/core/persqueue/events

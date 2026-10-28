@@ -15,7 +15,10 @@ ENDIF()
 
 INCLUDE(${ARCADIA_ROOT}/ydb/tests/supp/ubsan_supp.inc)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/getopt
     library/cpp/regex/pcre
     library/cpp/svnversion

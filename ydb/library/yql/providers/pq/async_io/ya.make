@@ -11,7 +11,10 @@ SRCS(
     probes.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/yql/providers/common/message_stream/async_io
     library/cpp/containers/disjoint_interval_tree
     library/cpp/protobuf/interop

@@ -6,7 +6,10 @@ SPLIT_FACTOR(80)
 
 SIZE(LARGE)
 INCLUDE(${ARCADIA_ROOT}/ydb/tests/large.inc)
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/getopt
     library/cpp/regex/pcre
     library/cpp/svnversion

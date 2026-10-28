@@ -5,7 +5,10 @@ SRCS(
     metadata_rpc_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/yql/providers/ydb_external/common
     contrib/libs/grpc
     library/cpp/testing/common

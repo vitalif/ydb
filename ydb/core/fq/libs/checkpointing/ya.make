@@ -9,7 +9,10 @@ SRCS(
     pending_checkpoint.h
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/threading/future
     ydb/core/fq/libs/checkpoint_storage/events
     ydb/core/fq/libs/checkpointing_common

@@ -1,6 +1,9 @@
 UNITTEST_FOR(ydb/library/yql/providers/yt/actors)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     yt/yql/providers/yt/codec/codegen/llvm16
     yt/yql/providers/yt/comp_nodes/llvm16
     yt/yql/providers/yt/gateway/file

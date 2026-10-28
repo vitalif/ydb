@@ -12,7 +12,10 @@ SRCS(
     b_table_stats_arena.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/tx/datashard
     ydb/core/protos
     ydb/library/actors/core

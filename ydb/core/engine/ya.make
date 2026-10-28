@@ -10,7 +10,10 @@ SRCS(
     mkql_proto.h
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/containers/stack_vector
     library/cpp/deprecated/enum_codegen
     library/cpp/random_provider

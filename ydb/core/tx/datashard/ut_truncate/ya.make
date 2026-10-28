@@ -2,7 +2,10 @@ UNITTEST()
 
 FORK_SUBTESTS()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/tx/datashard/ut_common
     ydb/core/tx/datashard
     library/cpp/getopt

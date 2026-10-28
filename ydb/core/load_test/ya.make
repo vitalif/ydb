@@ -7,7 +7,10 @@ SRCS(
     service_actor.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/svnversion
     library/cpp/json
     library/cpp/json/writer

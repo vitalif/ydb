@@ -50,7 +50,10 @@ SRCS(
     node_warden_vdisk.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/xxhash
     library/cpp/containers/absl
     library/cpp/json

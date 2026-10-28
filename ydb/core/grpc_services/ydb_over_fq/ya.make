@@ -9,7 +9,10 @@ SRCS(
     list_directory.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/retry
     ydb/core/fq/libs/control_plane_storage
     ydb/core/fq/libs/events

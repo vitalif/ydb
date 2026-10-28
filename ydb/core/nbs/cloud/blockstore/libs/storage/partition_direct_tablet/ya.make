@@ -20,7 +20,10 @@ SRCS(
     partition_direct_actor.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/nbs/cloud/blockstore/bootstrap
     ydb/core/nbs/cloud/blockstore/config/protos
     ydb/core/nbs/cloud/blockstore/libs/diagnostics

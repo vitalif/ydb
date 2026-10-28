@@ -2,7 +2,10 @@ UNITTEST_FOR(ydb/core/formats/arrow/accessor/sparsed)
 
 SIZE(SMALL)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/formats/arrow/accessor/sparsed
     ydb/core/formats/arrow/accessor/plain
     ydb/core/formats/arrow

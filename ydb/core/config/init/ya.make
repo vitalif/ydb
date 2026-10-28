@@ -10,7 +10,10 @@ SRCS(
     dummy.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/base
     ydb/core/driver_lib/cli_base
     ydb/core/driver_lib/cli_config_base

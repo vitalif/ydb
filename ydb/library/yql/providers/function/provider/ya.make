@@ -11,7 +11,10 @@ SRCS(
     dq_function_dq_integration.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     yql/essentials/core/dq_integration
     ydb/library/yql/providers/common/token_accessor/client
     yql/essentials/providers/common/dq

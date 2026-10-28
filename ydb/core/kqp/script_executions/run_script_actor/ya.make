@@ -7,7 +7,10 @@ SRCS(
     kqp_script_result_handler.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/protobuf/json
     ydb/core/base
     ydb/core/fq/libs/checkpointing/events

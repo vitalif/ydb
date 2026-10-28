@@ -7,7 +7,10 @@ SRCS(
     storage_transport_test_fixture.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/base
     ydb/core/mind/bscontroller
     ydb/core/nbs/cloud/blockstore/libs/common

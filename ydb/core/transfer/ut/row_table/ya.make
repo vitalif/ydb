@@ -7,7 +7,10 @@ ENV(YDB_ERASURE=block_4-2)
 ENV(YDB_FEATURE_FLAGS="enable_topic_transfer")
 ENV(YDB_GRPC_SERVICES="replication")
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/transfer/ut/common
 )
 

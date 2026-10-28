@@ -28,7 +28,10 @@ SRCS(
     yql_generic_utils.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/fmt
     library/cpp/json
     library/cpp/random_provider

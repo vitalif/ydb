@@ -8,7 +8,10 @@ SRCS(
     state.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     contrib/libs/apache/arrow
     library/cpp/streams/factory/open_by_signature
     ydb/library/accessor

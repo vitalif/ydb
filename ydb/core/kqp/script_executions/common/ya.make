@@ -6,7 +6,10 @@ SRCS(
     kqp_script_executions.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/blockcodecs
     library/cpp/json/writer
     library/cpp/protobuf/interop

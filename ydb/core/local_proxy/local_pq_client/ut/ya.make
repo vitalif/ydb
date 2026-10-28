@@ -15,7 +15,10 @@ SRCS(
     local_topic_write_session_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/ut/common
     ydb/library/aclib
     ydb/public/sdk/cpp/src/client/topic

@@ -7,7 +7,10 @@ SRCS(
     message_stream_client_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/testlib/basics
     ydb/library/testlib/common
     ydb/library/testlib/pq_helpers

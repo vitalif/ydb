@@ -1,6 +1,9 @@
 YQL_LIBRARY()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/scheme
     ydb/library/mkql_proto/protos
     ydb/library/yql/dq/actors/protos

@@ -16,7 +16,10 @@ SRCS(
     kqp_opt_phy_vector_index.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/kqp/common
     ydb/library/yql/dq/common
     ydb/library/yql/dq/opt

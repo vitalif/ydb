@@ -8,7 +8,10 @@ SRCS(
     sync.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/services/metadata/abstract
     ydb/core/tx/columnshard/blobs_action/events
     ydb/core/tx/columnshard/data_sharing/destination/events

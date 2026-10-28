@@ -9,7 +9,10 @@ SRCS(
     access_service.h
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/core
     ydb/library/grpc/actor_client
     ydb/library/ncloud/api

@@ -16,7 +16,10 @@ SRCS(
     transport_chaos_injector.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/threading/hot_swap
 
     ydb/core/mind/bscontroller

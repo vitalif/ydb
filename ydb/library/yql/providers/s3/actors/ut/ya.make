@@ -6,7 +6,10 @@ SRCS(
     yql_arrow_push_down_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     yql/essentials/minikql
     yql/essentials/public/udf/service/stub
     yql/essentials/sql/pg_dummy

@@ -1,6 +1,9 @@
 LIBRARY()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/persqueue/public/schema
     ydb/services/persqueue_v1/actors/schema/common
 )

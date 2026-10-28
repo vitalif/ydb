@@ -10,7 +10,10 @@ SRCS(
     etcd_watch.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/public/sdk/cpp/src/client/driver
     ydb/public/sdk/cpp/src/client/query
     ydb/apps/etcd_proxy/proto

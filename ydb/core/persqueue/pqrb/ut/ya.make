@@ -23,7 +23,10 @@ SRCS(
     write_partition_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/persqueue/pqrb
     ydb/core/persqueue/ut/common
     ydb/core/testlib/default

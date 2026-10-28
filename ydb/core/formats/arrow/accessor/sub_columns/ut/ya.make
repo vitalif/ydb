@@ -2,7 +2,10 @@ UNITTEST_FOR(ydb/core/formats/arrow/accessor/sub_columns)
 
 SIZE(SMALL)
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     yql/essentials/types/binary_json
     ydb/core/formats/arrow/accessor/composite
     ydb/core/formats/arrow/accessor/sub_columns

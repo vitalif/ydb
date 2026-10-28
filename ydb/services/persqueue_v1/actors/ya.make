@@ -1,6 +1,9 @@
 LIBRARY()
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/library/actors/core
     ydb/library/wilson_ids
     library/cpp/containers/disjoint_interval_tree

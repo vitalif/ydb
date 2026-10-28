@@ -15,7 +15,10 @@ SRCS(
     ut_helpers.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/digest/md5
     library/cpp/testing/unittest
     ydb/apps/version

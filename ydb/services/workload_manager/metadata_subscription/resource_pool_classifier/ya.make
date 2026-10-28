@@ -10,7 +10,10 @@ SRCS(
     snapshot.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/core/cms/console
     ydb/services/workload_manager/actors
     ydb/core/protos

@@ -8,7 +8,10 @@ ENV(YDB_FEATURE_FLAGS="enable_topic_transfer")
 ENV(YDB_REPORT_MONITORING_INFO="true")
 ENV(YDB_GRPC_SERVICES="replication")
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/threading/local_executor
     ydb/public/sdk/cpp/src/client/table
     ydb/public/sdk/cpp/src/client/topic

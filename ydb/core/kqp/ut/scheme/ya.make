@@ -24,7 +24,10 @@ SRCS(
     kqp_user_management_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     ydb/public/sdk/cpp/src/client/import
     yql/essentials/types/binary_json
     library/cpp/threading/local_executor

@@ -7,7 +7,10 @@ SRCS(
     dq_solomon_write_actor.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/json/easy_parse
     library/cpp/monlib/encode/json
     library/cpp/protobuf/util

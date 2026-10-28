@@ -10,7 +10,10 @@ SRCS(
     kqp_indexes_prefixed_vector_ut.cpp
 )
 
+USE_PCH(ydb/core/pch/pch.h $B/ydb/core/pch/ydb-core-pch.pch)
+
 PEERDIR(
+    ydb/core/pch
     library/cpp/threading/local_executor
     ydb/core/kqp
     ydb/core/kqp/ut/common
