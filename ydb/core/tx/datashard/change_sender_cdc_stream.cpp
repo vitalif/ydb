@@ -523,6 +523,14 @@ class TCdcChangeSenderMain
 
         Stream = TUserTable::TCdcStream(entry.CdcStreamInfo->Description);
 
+        if (entry.ListNodeEntry->Children.size() != 1) {
+            YDB_LOG_ERROR("CDC stream has no topic, dropping change records");
+
+            RemoveRecords();
+            KillSenders();
+            return Become(&TThis::StatePendingRemove);
+        }
+
         Y_ENSURE(entry.ListNodeEntry->Children.size() == 1);
         const auto& topic = entry.ListNodeEntry->Children.at(0);
 

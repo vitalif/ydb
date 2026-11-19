@@ -300,6 +300,10 @@ class TCdcWorker
             return Ack();
         }
 
+        if (entry.ListNodeEntry->Children.size() != 1) {
+            return Ack();
+        }
+
         Y_ENSURE(entry.ListNodeEntry->Children.size() == 1);
         const auto& topic = entry.ListNodeEntry->Children.at(0);
 
